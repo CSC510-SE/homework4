@@ -6,4 +6,4 @@
 # Step 4: Replace "male" with "M" and "female" with "F"
 # Step 5: Calculate the average age of the filtered rows, excluding rows with missing or non-numeric age values
 
-cat titanic.csv | grep -E "^[0-9]+,[0-9],2" | tr -d '\r' | grep -E ",S$" | sed -E 's/,[ ]*male,/,M,/g' | sed -E 's/,[ ]*female,/,F,/g' | gawk -F, '{ print $0; if ($6 != "" && $6 ~ /^[0-9]+$/) { sum += $6; count++ } } END { if (count > 0) print "Average Age:", sum/count }'
+gawk -F, '$3 == 2 {print $4 "," $5 "," $6, "," $7}' titanic.csv | sed 's/\<male\>/m/; s/\<female\>/f/' | gawk -F, ' {sum += $4; count++} END {if (count > 0) print "Mean age:"sum / count}'
